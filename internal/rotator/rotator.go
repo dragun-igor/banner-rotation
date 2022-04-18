@@ -1,8 +1,6 @@
 package rotator
 
 import (
-	"fmt"
-
 	"github.com/dragun-igor/banner-rotation/internal/resources"
 )
 
@@ -21,23 +19,25 @@ type ResultQuery struct {
 	Description string
 }
 
-func (r Rotator) AddBanner(bannerID int, slotID int) error {
-	var rq ResultQuery
-	query := `
-	SELECT *
-	FROM banners
-	WHERE id=$1;`
-	res, _ := r.res.DB.Query(query, bannerID)
-	for res.Next() {
-		_ = res.Scan(&rq.ID, &rq.Description)
-		fmt.Println(rq)
+func (r Rotator) AddBannerToSlot(slotID int, bannerID int) error {
+	query := "INSERT INTO slots_banners VALUES ($1, $2)"
+	row := r.res.DB.QueryRow(query, slotID, bannerID)
+	return row.Err()
+}
+
+func (r Rotator) RemoveBannerFromSlot(slotID int, bannerID int) error {
+	query := "DELETE FROM slots_banners WHERE slot_id=$1 AND banner_id=$2"
+	row := r.res.DB.QueryRow(query, slotID, bannerID)
+	return row.Err()
+}
+
+func (r Rotator) Click(slotID int, bannerID int, userGroupID int) error {
+	var id int
+	query := "SELECT id FROM slots_banners WHERE slot_id=$1 AND banner_id=$2"
+	err := r.res.DB.QueryRow(query, slotID, bannerID).Scan(&id)
+	if err != nil {
+		return err
 	}
-
-	query = `
-	INSERT INTO slots (id, description)
-	VALUES (1, $1)
-	RETURNING id;`
-	_ = r.res.DB.QueryRow(query, rq.Description)
-
+	query = "INSERT INTO"
 	return nil
 }
