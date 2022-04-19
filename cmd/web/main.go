@@ -13,4 +13,10 @@ func main() {
 	rot := rotator.NewRotator(res)
 	err := rot.AddBannerToSlot(1, 2)
 	fmt.Println(err)
+	err = rot.RemoveBannerFromSlot(1, 2)
+	fmt.Println(err)
+	err = rot.Showed(1, 1, 1)
+	fmt.Println(err)
+	err = rot.Clicked(1, 1, 1)
+	fmt.Println(err)
 }

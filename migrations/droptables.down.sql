@@ -1,5 +1,5 @@
 DROP TABLE stat;
 DROP TABLE user_groups;
-DROP TABLE slots_banners;
+DROP TABLE rotation;
 DROP TABLE banners;
 DROP TABLE slots;

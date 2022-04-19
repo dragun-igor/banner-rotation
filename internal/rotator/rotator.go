@@ -20,24 +20,31 @@ type ResultQuery struct {
 }
 
 func (r Rotator) AddBannerToSlot(slotID int, bannerID int) error {
-	query := "INSERT INTO slots_banners VALUES ($1, $2)"
+	query := "INSERT INTO rotation VALUES ($1, $2);"
 	row := r.res.DB.QueryRow(query, slotID, bannerID)
 	return row.Err()
 }
 
 func (r Rotator) RemoveBannerFromSlot(slotID int, bannerID int) error {
-	query := "DELETE FROM slots_banners WHERE slot_id=$1 AND banner_id=$2"
+	query := "DELETE FROM rotation WHERE slot_id=$1 AND banner_id=$2;"
 	row := r.res.DB.QueryRow(query, slotID, bannerID)
 	return row.Err()
 }
 
-func (r Rotator) Click(slotID int, bannerID int, userGroupID int) error {
+func (r Rotator) Showed(slotID int, bannerID int, userGroupID int) error {
 	var id int
-	query := "SELECT id FROM slots_banners WHERE slot_id=$1 AND banner_id=$2"
-	err := r.res.DB.QueryRow(query, slotID, bannerID).Scan(&id)
-	if err != nil {
-		return err
-	}
-	query = "INSERT INTO"
-	return nil
+	query := "INSERT INTO stat (slot_id, banner_id, user_group_id) VALUES ($1, $2, $3);"
+	_ = r.res.DB.QueryRow(query, slotID, bannerID).Scan(&id)
+	query = "UPDATE stat SET show = show + 1 WHERE slot_id=$1 AND banner_id=$2 AND user_group_id=$3;"
+	row := r.res.DB.QueryRow(query, slotID, bannerID, userGroupID)
+	return row.Err()
+}
+
+func (r Rotator) Clicked(slotID int, bannerID int, userGroupID int) error {
+	var id int
+	query := "INSERT INTO stat (slot_id, banner_id, user_group_id) VALUES ($1, $2, $3);"
+	_ = r.res.DB.QueryRow(query, slotID, bannerID).Scan(&id)
+	query = "UPDATE stat SET click = click + 1 WHERE slot_id=$1 AND banner_id=$2 AND user_group_id=$3;"
+	row := r.res.DB.QueryRow(query, slotID, bannerID, userGroupID)
+	return row.Err()
 }
