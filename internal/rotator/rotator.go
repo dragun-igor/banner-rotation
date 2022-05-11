@@ -1,7 +1,11 @@
 package rotator
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/dragun-igor/banner-rotation/internal/resources"
+	"github.com/lib/pq"
 )
 
 type Rotator struct {
@@ -47,4 +51,41 @@ func (r Rotator) Clicked(slotID int, bannerID int, userGroupID int) error {
 	query = "UPDATE stat SET click = click + 1 WHERE slot_id=$1 AND banner_id=$2 AND user_group_id=$3;"
 	row := r.res.DB.QueryRow(query, slotID, bannerID, userGroupID)
 	return row.Err()
+}
+
+type Stat struct {
+	slotID      int
+	usergroupID int
+	showed      int
+	clicked     int
+}
+
+func (r Rotator) SelectBanner(slotID int, userGroup int) {
+	var bannerID int
+	var banners []int
+	var arms Arms
+	query := "SELECT banner_id FROM rotation WHERE slot_id=$1;"
+	rows, err := r.res.DB.Query(query, slotID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		if err := rows.Scan(&bannerID); err != nil {
+			log.Fatal(err)
+		}
+		banners = append(banners, bannerID)
+	}
+	fmt.Println(banners)
+	query = "SELECT * FROM stat WHERE banner_id=ANY($1);"
+	rows, err = r.res.DB.Query(query, pq.Array(banners))
+	stats := make(map[int]*Stat)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		stat := &Stat{}
+		rows.Scan(&stat.slotID, &bannerID, &stat.usergroupID, &stat.clicked, &stat.showed)
+		stats[bannerID] = stat
+	}
+	fmt.Println(*stats[1])
 }

@@ -19,4 +19,5 @@ func main() {
 	fmt.Println(err)
 	err = rot.Clicked(1, 1, 1)
 	fmt.Println(err)
+	rot.SelectBanner(1, 1)
 }
