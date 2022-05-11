@@ -61,10 +61,11 @@ type Stat struct {
 	clicked     int
 }
 
-func (r Rotator) SelectBanner(slotID int, userGroup int) {
+func (r Rotator) SelectBanner(slotID int, userGroup int) (int, error) {
 	var bannerID int
 	var banners []int
 	var arms ucb1.Arms
+	var arm ucb1.Arm
 	query := "SELECT banner_id FROM rotation WHERE slot_id=$1;"
 	rows, err := r.res.DB.Query(query, slotID)
 	if err != nil {
@@ -85,8 +86,15 @@ func (r Rotator) SelectBanner(slotID int, userGroup int) {
 	}
 	for rows.Next() {
 		stat := &Stat{}
-		rows.Scan(&stat.slotID, &bannerID, &stat.usergroupID, arms., &stat.showed)
+		rows.Scan(&stat.slotID, &bannerID, &stat.usergroupID, &arm.Reward, &arm.Count)
 		stats[bannerID] = stat
+		arms = append(arms, arm)
 	}
 	fmt.Println(*stats[1])
+	fmt.Println(arms)
+
+	i := ucb1.UCB1(arms)
+	fmt.Println(i, arms[i])
+
+	return banners[i], nil
 }
