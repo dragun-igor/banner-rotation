@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/dragun-igor/banner-rotation/internal/resources"
+	"github.com/dragun-igor/banner-rotation/pkg/ucb1"
 	"github.com/lib/pq"
 )
 
@@ -63,7 +64,7 @@ type Stat struct {
 func (r Rotator) SelectBanner(slotID int, userGroup int) {
 	var bannerID int
 	var banners []int
-	var arms Arms
+	var arms ucb1.Arms
 	query := "SELECT banner_id FROM rotation WHERE slot_id=$1;"
 	rows, err := r.res.DB.Query(query, slotID)
 	if err != nil {
@@ -84,7 +85,7 @@ func (r Rotator) SelectBanner(slotID int, userGroup int) {
 	}
 	for rows.Next() {
 		stat := &Stat{}
-		rows.Scan(&stat.slotID, &bannerID, &stat.usergroupID, &stat.clicked, &stat.showed)
+		rows.Scan(&stat.slotID, &bannerID, &stat.usergroupID, arms., &stat.showed)
 		stats[bannerID] = stat
 	}
 	fmt.Println(*stats[1])
