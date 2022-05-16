@@ -38,7 +38,7 @@ func (s *Server) Run(ctx context.Context) error {
 }
 
 func (s *Server) grpcInit(ctx context.Context) error {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.Resources.Config.GRPCPort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", s.Resources.Config.GRPCPort))
 	if err != nil {
 		log.Fatal().Msgf("failed to listen: %v", err)
 	}
