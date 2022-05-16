@@ -24,6 +24,24 @@ type ResultQuery struct {
 	Description string
 }
 
+func (r Rotator) AddBanner(description string) error {
+	query := "INSERT INTO banners VALUES ($1);"
+	row := r.res.DB.QueryRow(query, description)
+	return row.Err()
+}
+
+func (r Rotator) AddSlot(description string) error {
+	query := "INSERT INTO slots VALUES ($1);"
+	row := r.res.DB.QueryRow(query, description)
+	return row.Err()
+}
+
+func (r Rotator) AddUserGroup(description string) error {
+	query := "INSERT INTO user_groups VALUES ($1);"
+	row := r.res.DB.QueryRow(query, description)
+	return row.Err()
+}
+
 func (r Rotator) AddBannerToSlot(slotID int, bannerID int) error {
 	query := "INSERT INTO rotation VALUES ($1, $2);"
 	row := r.res.DB.QueryRow(query, slotID, bannerID)

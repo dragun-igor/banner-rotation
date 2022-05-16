@@ -10,6 +10,18 @@ service Rotator {
     rpc SelectBanner (SelectBannerRequest) returns (SelectBannerResponse);
 }
 
+message AddBanner {
+    string description = 1;
+}
+
+message AddSlot {
+    string description = 1;
+}
+
+message AddUserGroup {
+    string description = 1;
+}
+
 message AddBannerToSlotRequest {
     uint32 banner_id = 1;
     uint32 slot_id = 2;
@@ -33,16 +45,4 @@ message SelectBannerRequest {
 
 message SelectBannerResponse {
     uint32 banner_id = 1;
-}
-
-message AddBanner {
-    string description = 1;
-}
-
-message AddSlot {
-    string description = 1;
-}
-
-message AddUserGroup {
-    string description = 1;
 }

@@ -2,24 +2,29 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/dragun-igor/banner-rotation/internal/resources"
 	"github.com/dragun-igor/banner-rotation/internal/rotator"
+	"github.com/dragun-igor/banner-rotation/internal/server"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	res := resources.GetResources(context.Background())
-	rot := rotator.NewRotator(res)
-	err := rot.AddBannerToSlot(1, 2)
-	fmt.Println(err)
-	err = rot.RemoveBannerFromSlot(1, 2)
-	fmt.Println(err)
-	err = rot.Showed(1, 1, 1)
-	fmt.Println(err)
-	err = rot.Clicked(1, 1, 1)
-	fmt.Println(err)
-	result, err := rot.SelectBanner(1, 1)
-	fmt.Println(result)
-	fmt.Println(err)
+	ctx := context.Context(context.Background())
+	res := resources.GetResources(ctx)
+
+	rr := createRotator(res)
+	initServer(ctx, rr, res)
+}
+
+func initServer(ctx context.Context, r *rotator.Rotator, res *resources.Resources) {
+	s := server.NewServer(
+		r,
+		res,
+	)
+	log.Fatal().Err(s.Run(ctx))
+}
+
+func createRotator(res *resources.Resources) *rotator.Rotator {
+	return rotator.NewRotator(res)
 }

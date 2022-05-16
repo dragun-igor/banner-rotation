@@ -11,15 +11,31 @@ import (
 
 type Server struct {
 	rotator *Rotator
+	pb.UnimplementedRotatorServer
 }
 
 func NewRotatorServer(rotator *Rotator) *Server {
 	return &Server{rotator: rotator}
 }
 
-func (r Server) SelectBanner(ctx context.Context, request *pb.SelectBannerRequest) (*pb.SelectBannerResponse, error) {
-	res, err := r.rotator.SelectBanner(int(request.SlotId), int(request.UserGroupId))
-	err = r.handleErr(err)
+// func (s Server) AddBanner(ctx context.Context, request *pb.AddBanner) error {
+// 	err := s.rotator.AddBanner(request.Description)
+// 	return handleErr(err)
+// }
+
+// func (s Server) AddSlot(ctx context.Context, request *pb.AddSlot) error {
+// 	err := s.rotator.AddSlot(request.Description)
+// 	return handleErr(err)
+// }
+
+// func (s Server) AddUserGroup(ctx context.Context, request *pb.AddUserGroup) error {
+// 	err := s.rotator.AddUserGroup(request.Description)
+// 	return handleErr(err)
+// }
+
+func (s Server) SelectBanner(ctx context.Context, request *pb.SelectBannerRequest) (*pb.SelectBannerResponse, error) {
+	res, err := s.rotator.SelectBanner(int(request.SlotId), int(request.UserGroupId))
+	err = handleErr(err)
 
 	if err != nil {
 		return nil, err
@@ -28,9 +44,9 @@ func (r Server) SelectBanner(ctx context.Context, request *pb.SelectBannerReques
 	return &pb.SelectBannerResponse{BannerId: uint32(res)}, nil
 }
 
-func (r Server) AddBannerToSlot(ctx context.Context, request *pb.AddBannerToSlotRequest) (*pb.AddBannerToSlotResponse, error) {
-	err := r.rotator.AddBannerToSlot(int(request.BannerId), int(request.SlotId))
-	err = r.handleErr(err)
+func (s Server) AddBannerToSlot(ctx context.Context, request *pb.AddBannerToSlotRequest) (*pb.AddBannerToSlotResponse, error) {
+	err := s.rotator.AddBannerToSlot(int(request.BannerId), int(request.SlotId))
+	err = handleErr(err)
 
 	if err != nil {
 		return nil, err
@@ -39,12 +55,9 @@ func (r Server) AddBannerToSlot(ctx context.Context, request *pb.AddBannerToSlot
 	return &pb.AddBannerToSlotResponse{}, nil
 }
 
-func (r Server) RemoveBannerFromSlot(
-	ctx context.Context,
-	request *pb.RemoveBannerFromSlotRequest,
-) (*pb.RemoveBannerFromSlotResponse, error) {
-	err := r.rotator.RemoveBannerFromSlot(int(request.BannerId), int(request.SlotId))
-	err = r.handleErr(err)
+func (s Server) RemoveBannerFromSlot(ctx context.Context, request *pb.RemoveBannerFromSlotRequest) (*pb.RemoveBannerFromSlotResponse, error) {
+	err := s.rotator.RemoveBannerFromSlot(int(request.BannerId), int(request.SlotId))
+	err = handleErr(err)
 
 	if err != nil {
 		return nil, err
@@ -53,7 +66,11 @@ func (r Server) RemoveBannerFromSlot(
 	return &pb.RemoveBannerFromSlotResponse{}, nil
 }
 
-func (r Server) handleErr(err error) error {
+func (s Server) RotatorServer() {
+
+}
+
+func handleErr(err error) error {
 	var errNotFound *NotFoundError
 
 	if err == nil {
