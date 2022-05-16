@@ -57,8 +57,6 @@ func (r Rotator) Clicked(slotID int, bannerID int, userGroupID int) error {
 type Stat struct {
 	slotID      int
 	usergroupID int
-	showed      int
-	clicked     int
 }
 
 func (r Rotator) SelectBanner(slotID int, userGroup int) (int, error) {

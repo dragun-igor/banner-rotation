@@ -11,13 +11,15 @@ import (
 )
 
 type Resources struct {
-	DB *sql.DB
+	DB     *sql.DB
+	Config *config.Config
 }
 
 func GetResources(ctx context.Context) *Resources {
 	config := config.New()
 	return &Resources{
-		DB: ConnectDB(*config, ctx),
+		DB:     ConnectDB(*config, ctx),
+		Config: config,
 	}
 }
 
