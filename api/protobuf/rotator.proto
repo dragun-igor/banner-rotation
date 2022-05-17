@@ -2,24 +2,36 @@ syntax = "proto3";
 
 package rotator;
 
-option go_package = "github.com/dragun-igor/rotator-banner/pkg/pb";
+option go_package = "pkg/pb";
 
 service Rotator {
+    rpc AddBanner(AddBannerRequest) returns (AddBannerResponse);
+    rpc AddSlot(AddSlotRequest) returns (AddSlotResponse);
+    rpc AddUserGroup(AddUserGroupRequest) returns (AddUserGroupResponse);
     rpc AddBannerToSlot(AddBannerToSlotRequest) returns (AddBannerToSlotResponse);
     rpc RemoveBannerFromSlot(RemoveBannerFromSlotRequest) returns (RemoveBannerFromSlotResponse);
     rpc SelectBanner (SelectBannerRequest) returns (SelectBannerResponse);
 }
 
-message AddBanner {
+message AddBannerRequest {
     string description = 1;
 }
 
-message AddSlot {
+message AddBannerResponse {
+}
+
+message AddSlotRequest {
     string description = 1;
 }
 
-message AddUserGroup {
+message AddSlotResponse {
+}
+
+message AddUserGroupRequest {
     string description = 1;
+}
+
+message AddUserGroupResponse {
 }
 
 message AddBannerToSlotRequest {
