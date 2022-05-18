@@ -1,5 +1,5 @@
-DROP TABLE stat;
-DROP TABLE user_groups;
-DROP TABLE rotation;
-DROP TABLE banners;
-DROP TABLE slots;
+DROP TABLE IF EXISTS stat;
+DROP TABLE IF EXISTS user_groups;
+DROP TABLE IF EXISTS rotation;
+DROP TABLE IF EXISTS banners;
+DROP TABLE IF EXISTS slots;

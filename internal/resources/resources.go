@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 
 	"github.com/dragun-igor/banner-rotation/internal/config"
 
@@ -28,7 +29,6 @@ func ConnectDB(config config.Config, ctx context.Context) *sql.DB {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.DBHost, config.DBPort, config.DBUser, config.DBPassword, config.DBName,
 	)
-	fmt.Println(dsn)
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		panic(err)
@@ -37,11 +37,11 @@ func ConnectDB(config config.Config, ctx context.Context) *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Succesfully connected to database!")
+	log.Println("Succesfully connected to database!")
 	go func() {
 		<-ctx.Done()
 		_ = db.Close()
-		fmt.Println("Connection to database has closed!")
+		log.Println("Connection to database has closed!")
 	}()
 	return db
 }

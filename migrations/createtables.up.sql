@@ -1,14 +1,14 @@
-CREATE TABLE slots (
+CREATE TABLE IF NOT EXISTS slots (
     id integer PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
     description text NOT NULL
 );
 
-CREATE TABLE banners (
+CREATE TABLE IF NOT EXISTS banners (
     id integer PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
     description text NOT NULL
 );
 
-CREATE TABLE rotation (
+CREATE TABLE IF NOT EXISTS rotation (
     slot_id integer NOT NULL,
     banner_id integer NOT NULL,
     CONSTRAINT fk_slot
@@ -20,12 +20,12 @@ CREATE TABLE rotation (
     UNIQUE (slot_id, banner_id)
 );
 
-CREATE TABLE user_groups (
+CREATE TABLE IF NOT EXISTS user_groups (
     id integer PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
     description text NOT NULL
 );
 
-CREATE TABLE stat (
+CREATE TABLE IF NOT EXISTS stat (
     slot_id integer NOT NULL,
     banner_id integer NOT NULL,
     user_group_id integer NOT NULL,
@@ -43,32 +43,32 @@ CREATE TABLE stat (
     UNIQUE (slot_id, banner_id, user_group_id)
 );
 
-INSERT INTO slots (description) VALUES
-('The first slot'),
-('The second slot'),
-('The third slot');
+-- INSERT INTO slots (description) VALUES
+-- ('The first slot'),
+-- ('The second slot'),
+-- ('The third slot');
 
-INSERT INTO banners (description) VALUES
-('The first banner'),
-('The second banner'),
-('The third banner');
+-- INSERT INTO banners (description) VALUES
+-- ('The first banner'),
+-- ('The second banner'),
+-- ('The third banner');
 
-INSERT INTO user_groups (description) VALUES
-('The first user_group'),
-('The second user_group'),
-('The third user_group');
+-- INSERT INTO user_groups (description) VALUES
+-- ('The first user_group'),
+-- ('The second user_group'),
+-- ('The third user_group');
 
-INSERT INTO rotation VALUES
-(1, 1),
-(1, 3),
-(2, 3),
-(3, 1);
+-- INSERT INTO rotation VALUES
+-- (1, 1),
+-- (1, 3),
+-- (2, 3),
+-- (3, 1);
 
-INSERT INTO stat (slot_id, banner_id, user_group_id) VALUES
-(1, 1, 1),
-(1, 3, 2),
-(1, 3, 3),
-(2, 3, 1),
-(2, 3, 3),
-(3, 1, 2),
-(3, 1, 1);
+-- INSERT INTO stat (slot_id, banner_id, user_group_id) VALUES
+-- (1, 1, 1),
+-- (1, 3, 2),
+-- (1, 3, 3),
+-- (2, 3, 1),
+-- (2, 3, 3),
+-- (3, 1, 2),
+-- (3, 1, 1);

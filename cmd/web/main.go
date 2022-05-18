@@ -1,30 +1,31 @@
 package main
 
 import (
-	"context"
-
-	"github.com/dragun-igor/banner-rotation/internal/resources"
-	"github.com/dragun-igor/banner-rotation/internal/rotator"
-	"github.com/dragun-igor/banner-rotation/internal/server"
-	"github.com/rs/zerolog/log"
+	"os"
 )
 
+// func main() {
+// 	ctx := context.Background()
+// 	res := resources.GetResources(ctx)
+
+// 	rr := createRotator(res)
+// 	initServer(ctx, rr, res)
+// }
+
+// func initServer(ctx context.Context, r *rotator.Rotator, res *resources.Resources) {
+// 	s := server.NewServer(
+// 		r,
+// 		res,
+// 	)
+// 	log.Fatal(s.Run(ctx))
+// }
+
+// func createRotator(res *resources.Resources) *rotator.Rotator {
+// 	return rotator.NewRotator(res)
+// }
+
 func main() {
-	ctx := context.Context(context.Background())
-	res := resources.GetResources(ctx)
-
-	rr := createRotator(res)
-	initServer(ctx, rr, res)
-}
-
-func initServer(ctx context.Context, r *rotator.Rotator, res *resources.Resources) {
-	s := server.NewServer(
-		r,
-		res,
-	)
-	log.Fatal().Err(s.Run(ctx))
-}
-
-func createRotator(res *resources.Resources) *rotator.Rotator {
-	return rotator.NewRotator(res)
+	path := "~/golang/banner-rotation/migrations/createtables.up.sql"
+	c, ioErr := os.ReadFile(path)
+	_, err := *pgx.Conn.Exec(string(c))
 }
