@@ -4,8 +4,6 @@ go 1.17
 
 require (
 	github.com/lib/pq v1.10.5
-	github.com/rs/zerolog v1.26.1
-	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
 )
